@@ -18,35 +18,32 @@ let charFromString (text:string) index =
 
 let subString (text:string) index =
     text.Substring(index, 1)
-    
 
-
-let rotorB1 (l:char) =
-    alphabet 
+let rotor fromMapping toMapping (l:char) = 
+    fromMapping
     |> indexOf l 
-    |> charFromString rotor1Mapping
-
-let rotorB1Reverse (l:char) =
-    rotor1Mapping
-    |> indexOf l 
-    |> charFromString alphabet
-
+    |> charFromString toMapping
+        
+let rotorB1 (l:char) = rotor alphabet rotor1Mapping l
+let rotorB1Reverse (l:char) = rotor rotor1Mapping alphabet l
+        
 let reflector (l:char) = 
     ((alphabet |> indexOf l) + (numberOfLetters / 2)) % numberOfLetters 
     |> charFromString alphabet
 
 let cipherChar = rotorB1 >> reflector >> rotorB1Reverse
-// let cipherString text = text
-    
+let cipherString = 
+    toUpper 
+    >> toCharArray
+    >> Seq.map (fun c -> c |> rotorB1 |> reflector |> rotorB1Reverse)
+    >> Seq.map charToString
+    >> Seq.reduce (+)
+        
 alphabet.ToCharArray() 
 |> Seq.map (fun c -> c |> rotorB1 |> reflector |> rotorB1Reverse)
 |> Seq.iter (printfn "%c")
 
 'B' |> rotorB1 |> reflector |> rotorB1Reverse
+'B' |> cipherChar |> cipherChar
 
-"Hello"
-|> toUpper
-|> toCharArray
-|> Seq.map (fun c -> c |> rotorB1 |> reflector |> rotorB1Reverse)
-|> Seq.map charToString
-|> Seq.reduce (+)
+"Hello" |> cipherString 
