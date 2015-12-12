@@ -1,5 +1,7 @@
-﻿let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+﻿let alphabet =      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 let rotor1Mapping = "BCDEFGHIJKLMNOPQRSTUVWXYZA"
+//                   00000000001111111111222222
+//                   01234567890123456789012345
 let numberOfLetters = alphabet.Length
 
 let toUpper (s:string) = s.ToUpper()
@@ -12,38 +14,66 @@ let indexOf (toFind:char) (text:string) =
     | -1 -> failwith (sprintf "Unknown char '%c'" toFind)
     | i -> i
 
-let charFromString (text:string) index = 
-    let s = text.Substring(index, 1)
-    s.Chars(0)
+let charFromString (text:string) index = text.[index]
 
-let subString (text:string) index =
-    text.Substring(index, 1)
+let addAndMod a b = (a + b) % numberOfLetters
 
-let rotor fromMapping toMapping (l:char) = 
-    fromMapping
-    |> indexOf l 
+let modular x m = 
+    match x % m with
+    | x when x < 0 -> x + m
+    | _ -> x
+
+let rotori i fromMapping toMapping (l:char) = 
+    let mappingIndex = fromMapping |> indexOf l
+    addAndMod mappingIndex i
     |> charFromString toMapping
         
-let rotorB1 (l:char) = rotor alphabet rotor1Mapping l
-let rotorB1Reverse (l:char) = rotor rotor1Mapping alphabet l
-        
+let rotoriB1 i (l:char) = 
+    rotori i alphabet rotor1Mapping l
+
+let rotoriB1Reverse i (l:char) = 
+    rotori (modular (-i) numberOfLetters) rotor1Mapping alphabet l
+
 let reflector (l:char) = 
     ((alphabet |> indexOf l) + (numberOfLetters / 2)) % numberOfLetters 
     |> charFromString alphabet
 
-let cipherChar = rotorB1 >> reflector >> rotorB1Reverse
+let p v = v |> printfn "%A";v 
+
+let cipherChar i = p >> rotoriB1 i >> p >> reflector >> p >> rotoriB1Reverse i >> p
+let decipherChar i = rotoriB1Reverse i >> p >> reflector >> p >> rotoriB1 i >> p
+
 let cipherString = 
-    toUpper 
+    toUpper
     >> toCharArray
-    >> Seq.map (fun c -> c |> rotorB1 |> reflector |> rotorB1Reverse)
+    >> Seq.mapi (fun i c -> c |> cipherChar i)
     >> Seq.map charToString
     >> Seq.reduce (+)
         
-alphabet.ToCharArray() 
-|> Seq.map (fun c -> c |> rotorB1 |> reflector |> rotorB1Reverse)
-|> Seq.iter (printfn "%c")
+//'B' |> rotorB1 |> reflector |> rotorB1Reverse
+//'A' |> cipherChar 0 |> cipherChar 0
+'A' |> cipherChar 1 |> cipherChar 1
+'A' |> cipherChar 2 |> cipherChar 2
+'E' |> cipherChar 2 //|> cipherChar 1
 
-'B' |> rotorB1 |> reflector |> rotorB1Reverse
-'B' |> cipherChar |> cipherChar
+//'P' |> cipherChar 1 
+//'P' |> rotoriB1 1 |> reflector |> rotoriB1Reverse 1
+//'A' |> rotoriB1 1
+//'L' |> cipherChar 2 |> cipherChar 2
+//'L' |> cipherChar 3 |> cipherChar 3
+//'O' |> cipherChar 4 |> cipherChar 4
+//'O' |> rotori 1 alphabet rotor1Mapping
 
-"Hello" |> cipherString 
+"Hello" |> cipherString |> cipherString 
+
+//'A' |> rotori 2 alphabet rotor1Mapping
+
+modular -8 20
+
+let negativeMod x m = 
+    match (-x) % numberOfLetters with
+    | x when x < 0 -> x + m
+    | _ -> x
+
+negativeMod 8 20
+
