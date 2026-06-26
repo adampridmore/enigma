@@ -21,8 +21,9 @@ let rotorVI   = { Wiring = "JPGVOUMFYQBENHZRDKASXLICTW"; Notches = ['Z'; 'M'] }
 let rotorVII  = { Wiring = "NZJHGRCXMYSWBOUFAIVLPEKQDT"; Notches = ['Z'; 'M'] }
 let rotorVIII = { Wiring = "FKQHTLXOCBJSPDZRAMEWNIUYGV"; Notches = ['Z'; 'M'] }
 
-let ukwB = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
-let ukwC = "FVPJIAOYEDRZXWGCTKUQSBNMHL"
+// Reflector (Umkehrwalze) wiring — index i maps letter i to its reciprocal pair
+let ukwB = "YRUHQSLDPXNGOKMIEBFZCWVJAT"  // Reflector B (most common)
+let ukwC = "FVPJIAOYEDRZXWGCTKUQSBNMHL"  // Reflector C
 
 let makePlugboard (pairs: string list) : Map<char, char> =
     pairs
