@@ -1,32 +1,38 @@
-﻿module EnigmaCipherTest
+module EnigmaCipherTest
 
 open EnigmaCipher
 open FsUnit.Xunit
-open System
 open Xunit
 
 [<Fact>]
-let ``My test`` () =
-    Assert.True(true)
+let ``Test vector 1 - no plugboard canonical AAAAA`` () =
+    let config = {
+        Rotors = [rotorI; rotorII; rotorIII]
+        Reflector = ukwB
+        Plugboard = Map.empty
+        RingSettings = [1; 1; 1]
+        Positions = ['A'; 'A'; 'A']
+    }
+    cipherString config "AAAAA" |> should equal "BDZGO"
 
 [<Fact>]
-let ``Ciper and deciper string``() = 
-   
-    "Hello" |> cipherString |> cipherString |> should equal "HELLO"
+let ``Test vector 1 - symmetry reciprocal BDZGO`` () =
+    let config = {
+        Rotors = [rotorI; rotorII; rotorIII]
+        Reflector = ukwB
+        Plugboard = Map.empty
+        RingSettings = [1; 1; 1]
+        Positions = ['A'; 'A'; 'A']
+    }
+    cipherString config "BDZGO" |> should equal "AAAAA"
 
 [<Fact>]
-let ``Ciper string``() = 
-    "Hello" |> cipherString |> should equal "URYYB"
-
-[<Fact>]
-let ``Ciper character``() = 
-    'A' |> cipherChar 0 |> should equal 'N'
-    
-[<Fact>]
-let ``Ciper character with 1 rotation``() = 
-    'A' |> cipherChar 1 |> should equal 'N'
-    
-[<Fact>]
-let ``Ciper character with 10 rotation``() = 
-    'A' |> cipherChar 10 |> should equal 'N'
-
+let ``Test vector 2 - with plugboard rotors VII V IV`` () =
+    let config = {
+        Rotors = [rotorVII; rotorV; rotorIV]
+        Reflector = ukwB
+        Plugboard = makePlugboard ["AD"; "FT"; "WH"; "JO"; "PN"]
+        RingSettings = [2; 3; 4]     // mikepound ringSettings={1,2,3} 0-indexed → 1-indexed: 2,3,4
+        Positions = ['K'; 'F'; 'M']  // mikepound rotorPositions={10,5,12} 0-indexed → K,F,M
+    }
+    cipherString config "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> should equal "UJFZBOKXBAQSGCLDNUTSNTASEF"
