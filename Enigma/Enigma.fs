@@ -22,6 +22,7 @@ let rotorVII  = { Wiring = "NZJHGRCXMYSWBOUFAIVLPEKQDT"; Notches = ['Z'; 'M'] }
 let rotorVIII = { Wiring = "FKQHTLXOCBJSPDZRAMEWNIUYGV"; Notches = ['Z'; 'M'] }
 
 // Reflector (Umkehrwalze) wiring — index i maps letter i to its reciprocal pair
+let ukwA = "EJMZALYXVBWFCRQUONTSPIKHGD"  // Reflector A
 let ukwB = "YRUHQSLDPXNGOKMIEBFZCWVJAT"  // Reflector B (most common)
 let ukwC = "FVPJIAOYEDRZXWGCTKUQSBNMHL"  // Reflector C
 

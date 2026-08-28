@@ -5,7 +5,7 @@ An F# implementation of the Wehrmacht/Luftwaffe Enigma I cipher machine, verifie
 ## Features
 
 - Rotors I–VIII with correct wirings and notch positions (VI, VII, VIII have double notches)
-- Reflectors UKW-B and UKW-C
+- Reflectors UKW-A, UKW-B and UKW-C
 - Plugboard (Steckerbrett)
 - Correct rotor stepping including the double-step anomaly
 - Ring settings (Ringstellung)
@@ -50,3 +50,6 @@ dotnet test --filter "FullyQualifiedName~<test name>"
 |---|---|---|---|---|---|---|
 | I II III | UKW-B | 1 1 1 | A A A | none | `AAAAA` | `BDZGO` |
 | VII V IV | UKW-B | 2 3 4 | K F M | AD FT WH JO PN | `ABCDEFGHIJKLMNOPQRSTUVWXYZ` | `UJFZBOKXBAQSGCLDNUTSNTASEF` |
+| I II III | UKW-B | 1 1 1 | A A A | none | `ADAMPRIDMORE` | `BAZOJTPUOSVT` |
+
+Vectors were cross-checked against the [101 Computing Enigma emulator](https://www.101computing.net/enigma-machine-emulator/).

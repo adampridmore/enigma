@@ -36,3 +36,14 @@ let ``Test vector 2 - with plugboard rotors VII V IV`` () =
         Positions = ['K'; 'F'; 'M']  // mikepound rotorPositions={10,5,12} 0-indexed → K,F,M
     }
     cipherString config "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> should equal "UJFZBOKXBAQSGCLDNUTSNTASEF"
+
+[<Fact>]
+let ``Test vector 3 - default settings ADAMPRIDMORE, cross-checked against 101computing.net emulator`` () =
+    let config = {
+        Rotors = [rotorI; rotorII; rotorIII]
+        Reflector = ukwB
+        Plugboard = Map.empty
+        RingSettings = [1; 1; 1]
+        Positions = ['A'; 'A'; 'A']
+    }
+    cipherString config "ADAMPRIDMORE" |> should equal "BAZOJTPUOSVT"
